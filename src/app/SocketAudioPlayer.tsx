@@ -11,8 +11,8 @@ export default function Home() {
     const query = new URLSearchParams(window.location.search);
     const roomId = query.get("roomId") || "default-room";
     const username = query.get("username") || "guest";
-
-    socket = io("http://localhost:8080", {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    socket = io(backendUrl, {
       query: { roomId, username },
     });
 
