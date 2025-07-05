@@ -17,8 +17,8 @@ import {
 import { toast } from "sonner";
 import { create } from "zustand";
 import { useRoomStore } from "./room";
-
 export const MAX_NTP_MEASUREMENTS = 40;
+import { Socket } from "socket.io-client";
 
 // https://webaudioapi.com/book/Web_Audio_API_Boris_Smus_html/ch02.html
 
@@ -47,8 +47,8 @@ interface GlobalStateValues {
   uploadHistory: { name: string; timestamp: number; id: string }[];
   downloadedAudioIds: Set<string>;
 
-  // Websocket
-  socket: WebSocket | null;
+  // socket
+  socket: Socket | null;
 
   // Spatial audio
   spatialConfig?: SpatialConfigType;
@@ -98,7 +98,7 @@ interface GlobalState extends GlobalStateValues {
     audioId: string;
   }) => void;
   schedulePause: (data: { targetServerTime: number }) => void;
-  setSocket: (socket: WebSocket) => void;
+  setSocket: (socket: Socket) => void;
   broadcastPlay: (trackTimeSeconds?: number) => void;
   broadcastPause: () => void;
   startSpatialAudio: () => void;
@@ -252,8 +252,9 @@ const initializeAudioContext = () => {
 export const useGlobalStore = create<GlobalState>((set, get) => {
   // Function to initialize or reinitialize audio system
   const initializeAudio = async () => {
-    console.log("initializeAudio()");
+    console.log("initializeAudio(),");
     // Create fresh audio context
+    console.log("SRC: ",STATIC_AUDIO_SOURCES)
     const audioContext = initializeAudioContext();
 
     // Create master gain node for volume control
@@ -266,6 +267,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       source: STATIC_AUDIO_SOURCES[0],
       audioContext,
     });
+    console.log("first: ",firstSource)
 
     // Decode initial first audio source
     sourceNode.buffer = firstSource.audioBuffer;
@@ -325,7 +327,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       const { socket } = getSocket(state);
 
       sendWSRequest({
-        ws: socket,
+        socket: socket,
         request: {
           type: ClientActionEnum.enum.REUPLOAD_AUDIO,
           audioId,
@@ -339,7 +341,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       const { socket } = getSocket(state);
 
       sendWSRequest({
-        ws: socket,
+        socket: socket,
         request: {
           type: ClientActionEnum.enum.REORDER_CLIENT,
           clientId,
@@ -412,7 +414,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       set({ listeningSourcePosition: { x, y } });
 
       sendWSRequest({
-        ws: socket,
+        socket: socket,
         request: { type: ClientActionEnum.enum.SET_LISTENING_SOURCE, x, y },
       });
     },
@@ -428,7 +430,8 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
           try {
             await audioContext.resume();
             console.log("AudioContext resumed via user gesture");
-          } catch (err) {
+          } 
+          catch (err) {
             console.warn("Failed to resume AudioContext", err);
           }
         }
@@ -515,7 +518,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
         toast.error("Audio file not found. Please reupload the audio file.");
         return;
       }
-
+      
       state.playAudio({
         offset: data.trackTimeSeconds,
         when: waitTimeSeconds,
@@ -546,7 +549,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       }
 
       sendWSRequest({
-        ws: socket,
+        socket: socket,
         request: {
           type: ClientActionEnum.enum.PLAY,
           trackTimeSeconds: trackTimeSeconds ?? state.getCurrentTrackPosition(),
@@ -560,7 +563,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       const { socket } = getSocket(state);
 
       sendWSRequest({
-        ws: socket,
+        socket: socket,
         request: {
           type: ClientActionEnum.enum.PAUSE,
         },
@@ -572,7 +575,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       const { socket } = getSocket(state);
 
       sendWSRequest({
-        ws: socket,
+        socket: socket,
         request: {
           type: ClientActionEnum.enum.START_SPATIAL_AUDIO,
         },
@@ -584,7 +587,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       const { socket } = getSocket(state);
 
       sendWSRequest({
-        ws: socket,
+        socket: socket,
         request: {
           type: ClientActionEnum.enum.STOP_SPATIAL_AUDIO,
         },
@@ -603,6 +606,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
     },
 
     sendNTPRequest: () => {
+      // console.log("sending NTP request");
       const state = get();
       if (state.ntpMeasurements.length >= MAX_NTP_MEASUREMENTS) {
         const { averageOffset, averageRoundTrip } = calculateOffsetEstimate(
@@ -613,19 +617,18 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
           roundTripEstimate: averageRoundTrip,
           isSynced: true,
         });
-
         if (averageRoundTrip > 750) {
           toast.error("Latency is very high (>750ms). Sync may be unstable.");
         }
-
         return;
       }
-
+      
       // Otherwise not done, keep sending
       const { socket } = getSocket(state);
-
-      // Send the first one
+      
+      // Send one
       _sendNTPRequest(socket);
+      // console.log("is Synced new: ", state.isSynced);
     },
 
     resetNTPConfig() {
@@ -916,8 +919,8 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
         }
       }
 
-      // Close the websocket connection if it exists
-      if (state.socket && state.socket.readyState === WebSocket.OPEN) {
+      // Close the socket connection if it exists
+      if(state.socket && state.socket.connected) {
         state.socket.close();
       }
 

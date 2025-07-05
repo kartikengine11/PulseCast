@@ -1,11 +1,12 @@
-import { WSRequestType } from "../app/kartik";
+import { Socket } from "socket.io-client";
+import { WSRequestType } from "../app/kartik"; // Adjust path as needed
 
 export const sendWSRequest = ({
-  ws,
+  socket,
   request,
 }: {
-  ws: WebSocket;
+  socket: Socket;
   request: WSRequestType;
 }) => {
-  ws.send(JSON.stringify(request));
+  socket.emit("message", request); 
 };

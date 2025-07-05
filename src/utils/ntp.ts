@@ -1,5 +1,6 @@
 import { ClientActionEnum, epochNow } from "../app/kartik";
 import { sendWSRequest } from "./ws";
+import { Socket } from "socket.io-client";
 
 export interface NTPMeasurement {
   t0: number;
@@ -10,14 +11,15 @@ export interface NTPMeasurement {
   clockOffset: number;
 }
 
-export const _sendNTPRequest = (ws: WebSocket) => {
-  if (ws.readyState !== WebSocket.OPEN) {
-    throw new Error("Cannot send NTP request: WebSocket is not open");
+export const _sendNTPRequest = (socket: Socket) => {
+  console.log("inside _ntp")
+  if (!socket.connected){
+    console.warn("Cannot send NTP request: WebSocket is not open");
+    return;
   }
-
   const t0 = epochNow();
   sendWSRequest({
-    ws,
+    socket,
     request: {
       type: ClientActionEnum.enum.NTP_REQUEST,
       t0,

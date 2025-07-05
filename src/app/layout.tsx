@@ -20,11 +20,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Beatsync",
+  title: "Pulsecast",
   description:
-    "Beatsync is an open-source, web audio player built for multi-device playback.",
+    "PulseCast is a web audio player built for multi-device playback.",
   keywords: ["music", "sync", "audio", "collaboration", "real-time"],
-  authors: [{ name: "Freeman Jiang" }],
+  authors: [{ name: "Kartik Kumar" }],
 };
 
 export default function RootLayout({

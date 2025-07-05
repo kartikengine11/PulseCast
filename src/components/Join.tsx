@@ -55,7 +55,7 @@ export const Join = () => {
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     setIsJoining(true)
 
-    if (!validateFullRoomId(data.roomId)) {
+    if(!validateFullRoomId(data.roomId)) {
       toast.error("Invalid room code. Please enter 6 digits.")
       setIsJoining(false)
       return
@@ -77,25 +77,25 @@ export const Join = () => {
 
   return (
     <motion.div
-  className="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] backdrop-blur-lg"
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 0.5 }}
->
-  <div className="w-full px-4">
-    <motion.div
-      className="flex flex-col items-center justify-center p-8 rounded-3xl bg-white/5 border border-white/20 shadow-2xl max-w-md mx-auto space-y-6 backdrop-blur-xl"
-      initial={{ opacity: 0, y: 10, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] backdrop-blur-lg"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
     >
-      <motion.h2 className="text-xl font-bold tracking-tight text-white">
-        🔐 Join a Room
-      </motion.h2>
+    <div className="w-full px-4">
+      <motion.div
+        className="flex flex-col items-center justify-center p-8 rounded-3xl bg-white/5 border border-white/20 shadow-2xl max-w-md mx-auto space-y-6 backdrop-blur-xl"
+        initial={{ opacity: 0, y: 10, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <motion.h2 className="text-xl font-bold tracking-tight text-white">
+          🔐 Join a Room
+        </motion.h2>
 
-      <motion.p className="text-sm text-neutral-300 text-center">
-        Enter your 6-digit code or create a new one
-      </motion.p>
+        <motion.p className="text-sm text-neutral-300 text-center">
+          Enter your 6-digit code or create a new one
+        </motion.p>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
@@ -197,7 +197,6 @@ export const Join = () => {
       </motion.p>
     </motion.div>
   </div>
-</motion.div>
-
+    </motion.div>
   )
 }
