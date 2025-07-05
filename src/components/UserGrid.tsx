@@ -19,7 +19,6 @@ import {
 
 // Add custom scrollbar styles
 import { Button } from "../components/ui/button";
-import { sampleClients } from "@/types/temp";
 
 // Define prop types for components
 interface ClientAvatarProps {
