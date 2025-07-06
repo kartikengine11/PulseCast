@@ -17,27 +17,28 @@ export const AudioUploader = () => {
     setFileName(file.name);
     try {
       setIsUploading(true);
-      const reader = new FileReader();
-      const base64: string = await new Promise((resolve, reject) => {
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "your_unsigned_preset"); // Replace with your preset
+        formData.append("folder", `pulseCast/${roomId}`);
 
-      const response = await axios.post('/api/audio-upload', {
-        fileBase64: base64,
-        roomId,
-      });
-      const { url } = response.data;
-      console.log("url: ", url);
-      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload-complete`,{
-        publicUrl: url,
-        originalName: file.name,
-        roomId
-      })
+        // const response = await axios.post(
+        //   `https://api.cloudinary.com/v1_1/db1e4nbaa/video/upload`,
+        //   formData,
+        //   {
+        //     headers: { "Content-Type": "multipart/form-data" },
+        //     onUploadProgress: (progressEvent) => {
+        //       const percent = Math.round(
+        //         (progressEvent.loaded * 100) / (progressEvent.total || 1)
+        //       );
+        //       console.log(`Upload progress: ${percent}%`);
+        //     },
+        //   }
+        // );
+        console.log("file uploaded");
+        // const { secure_url } = response.data;
+        // console.log("Uploaded file URL:", secure_url);
 
-
-      // Upload the file to the server as binary
       setTimeout(() => setFileName(null), 3000);
     } 
     catch (err) {
