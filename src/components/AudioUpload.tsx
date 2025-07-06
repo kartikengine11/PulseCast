@@ -17,13 +17,27 @@ export const AudioUploader = () => {
     setFileName(file.name);
     try {
       setIsUploading(true);
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("room_id", roomId);
-      
+      const reader = new FileReader();
+      const base64: string = await new Promise((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      const response = await axios.post('/api/audio-upload', {
+        fileBase64: base64,
+        roomId,
+      });
+      const { url } = response.data;
+      console.log("url: ", url);
+      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload-complete`,{
+        publicUrl: url,
+        originalName: file.name,
+        roomId
+      })
+
+
       // Upload the file to the server as binary
-      const response = await axios.post('/api/audio-upload',formData);
-      // console.log("response came out: ",response);
       setTimeout(() => setFileName(null), 3000);
     } 
     catch (err) {
