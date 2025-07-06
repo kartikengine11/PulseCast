@@ -252,9 +252,9 @@ const initializeAudioContext = () => {
 export const useGlobalStore = create<GlobalState>((set, get) => {
   // Function to initialize or reinitialize audio system
   const initializeAudio = async () => {
-    console.log("initializeAudio(),");
+    // console.log("initializeAudio(),");
     // Create fresh audio context
-    console.log("SRC: ",STATIC_AUDIO_SOURCES)
+    // console.log("SRC: ",STATIC_AUDIO_SOURCES)
     const audioContext = initializeAudioContext();
 
     // Create master gain node for volume control
@@ -267,7 +267,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       source: STATIC_AUDIO_SOURCES[0],
       audioContext,
     });
-    console.log("first: ",firstSource)
+    // console.log("first: ",firstSource)
 
     // Decode initial first audio source
     sourceNode.buffer = firstSource.audioBuffer;
@@ -284,7 +284,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       downloadedAudioIds: new Set<string>(),
       duration: firstSource.audioBuffer.duration,
     });
-    console.log(`${0} Decoded source ${firstSource.name}`);
+    // console.log(`${0} Decoded source ${firstSource.name}`);
 
     // Load rest asynchronously, keep updating state
     for (let i = 1; i < STATIC_AUDIO_SOURCES.length; i++) {
@@ -295,7 +295,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
         audioContext,
       });
       set({ audioSources: [...state.audioSources, loadedSource] });
-      console.log(`${i} Decoded source ${loadedSource.name}`);
+      // console.log(`${i} Decoded source ${loadedSource.name}`);
     }
   };
 
@@ -374,10 +374,10 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
         const audioBuffer = await audioContext.decodeAudioData(
           source.audioBuffer
         );
-        console.log(
-          "Decoded audio setting state to add audio source",
-          source.name
-        );
+        // console.log(
+        //   "Decoded audio setting state to add audio source",
+        //   source.name
+        // );
 
         // Add to upload history when adding an audio source
         // If this has an ID, mark it as downloaded
@@ -429,7 +429,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
         if (audioContext && audioContext.state === "suspended") {
           try {
             await audioContext.resume();
-            console.log("AudioContext resumed via user gesture");
+            // console.log("AudioContext resumed via user gesture");
           } 
           catch (err) {
             console.warn("Failed to resume AudioContext", err);
@@ -529,7 +529,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
     schedulePause: ({ targetServerTime }: { targetServerTime: number }) => {
       const state = get();
       const waitTimeSeconds = getWaitTimeSeconds(state, targetServerTime);
-      console.log(`Pausing track in ${waitTimeSeconds}`);
+      // console.log(`Pausing track in ${waitTimeSeconds}`);
 
       state.pauseAudio({
         when: waitTimeSeconds,
@@ -715,37 +715,37 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
             Math.abs(audioContext.currentTime - expectedEndTime) < 0.5;
 
           if (endedNaturally) {
-            console.log(
-              "Track ended naturally, skipping to next via autoplay."
-            );
+            // console.log(
+            //   "Track ended naturally, skipping to next via autoplay."
+            // );
             // Set currentTime to duration, as playback fully completed
             // We don't set isPlaying false here, let skipToNextTrack handle state transition
             set({ currentTime: currentState.duration });
             currentState.skipToNextTrack(true); // Trigger autoplay skip
           } else {
-            console.log(
-              "onended fired but not deemed a natural end (likely manual stop/skip). State should be handled elsewhere."
-            );
+            // console.log(
+            //   "onended fired but not deemed a natural end (likely manual stop/skip). State should be handled elsewhere."
+            // );
             // If stopped manually (pauseAudio) or skipped (setSelectedAudioId),
             // those functions are responsible for setting isPlaying = false and currentTime.
             // No action needed here for non-natural ends.
           }
         } else {
-          console.log(
-            "onended fired but player was already stopped/paused or source node changed."
-          );
+          // console.log(
+          //   "onended fired but player was already stopped/paused or source node changed."
+          // );
         }
       };
 
       newSourceNode.start(startTime, data.offset);
-      console.log(
-        "Started playback at offset:",
-        data.offset,
-        "with delay:",
-        data.when,
-        "audio index:",
-        audioIndex
-      );
+      // console.log(
+      //   "Started playback at offset:",
+      //   data.offset,
+      //   "with delay:",
+      //   data.when,
+      //   "audio index:",
+      //   audioIndex
+      // );
 
       // Update state with the new source node and tracking info
       set((state) => ({
@@ -801,12 +801,12 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       const elapsedSinceStart = stopTime - state.playbackStartTime;
       const currentTrackPosition = state.playbackOffset + elapsedSinceStart;
 
-      console.log(
-        "Stopping at:",
-        data.when,
-        "Current track position:",
-        currentTrackPosition
-      );
+      // console.log(
+      //   "Stopping at:",
+      //   data.when,
+      //   "Current track position:",
+      //   currentTrackPosition
+      // );
 
       set((state) => ({
         ...state,

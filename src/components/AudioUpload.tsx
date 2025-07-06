@@ -22,9 +22,8 @@ export const AudioUploader = () => {
       formData.append("room_id", roomId);
       
       // Upload the file to the server as binary
-      console.log("ready to emit: ",formData.entries);
       const response = await axios.post('/api/audio-upload',formData);
-      console.log("response came out: ",response);
+      // console.log("response came out: ",response);
       setTimeout(() => setFileName(null), 3000);
     } 
     catch (err) {

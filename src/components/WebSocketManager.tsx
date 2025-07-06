@@ -66,7 +66,7 @@ const WebSocketManager = ({ roomId, username }: WebSocketManagerProps) => {
         if (
             isLoadingRoom || 
             !roomId || !username) return;
-            console.log(`📡 Connecting to WebSocket for ${roomId} / ${username}`);
+            // console.log(`📡 Connecting to WebSocket for ${roomId} / ${username}`);
         // Don't create a new connection if we already have one
         if(socket){
             return;
@@ -87,7 +87,7 @@ const WebSocketManager = ({ roomId, username }: WebSocketManagerProps) => {
         })
         newSocket.on('message',async (data)=>{
             const response = WSResponseSchema.parse(data);
-            console.log('Received message from server',response);
+            // console.log('Received message from server',response);
             if(response.type === "NTP_RESPONSE"){
                 const ntpMeasurement = handleNTPResponse(data);
                 addNTPMeasurement(ntpMeasurement);
@@ -98,12 +98,12 @@ const WebSocketManager = ({ roomId, username }: WebSocketManagerProps) => {
             }
             else if (response.type === "ROOM_EVENT"){
                 const { event } = response;
-                console.log("Room event:", event);
+                // console.log("Room event:", event);
                 if(event.type === "CLIENT_CHANGE"){
                     setConnectedClients(event.clients);
                 } 
                 else if (event?.type === "NEW_AUDIO_SOURCE") {
-                    console.log("Received new audio source:", event);
+                    // console.log("Received new audio source:", event);
                     const title = event?.title;
                     const id = event?.id;
                     if (!title || !id) {
@@ -117,7 +117,7 @@ const WebSocketManager = ({ roomId, username }: WebSocketManagerProps) => {
                     toast.promise(
                         fetchAudio(id)
                         .then(async (blob) => {
-                            console.log("Audio fetched successfully:", id);
+                            // console.log("Audio fetched successfully:", id);
                             try {
                                 if(!blob) {
                                     console.log("blob is null");
@@ -125,7 +125,7 @@ const WebSocketManager = ({ roomId, username }: WebSocketManagerProps) => {
                                 }
     
                             const arrayBuffer = await blob.arrayBuffer();
-                            console.log("ArrayBuffer created successfully");
+                            // console.log("ArrayBuffer created successfully");
 
                             const audioSource: RawAudioSource = {
                                 name: trimFileName(title),
@@ -185,7 +185,7 @@ const WebSocketManager = ({ roomId, username }: WebSocketManagerProps) => {
             }
         })
         return ()=>{
-            console.log("🔌 Cleaning up Socket.IO connection");
+            // console.log("🔌 Cleaning up Socket.IO connection");
             newSocket.disconnect();
         }
 

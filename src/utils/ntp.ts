@@ -12,7 +12,7 @@ export interface NTPMeasurement {
 }
 
 export const _sendNTPRequest = (socket: Socket) => {
-  console.log("inside _ntp")
+  // console.log("inside _ntp")
   if (!socket.connected){
     console.warn("Cannot send NTP request: WebSocket is not open");
     return;
@@ -49,7 +49,7 @@ export const calculateOffsetEstimate = (ntpMeasurements: NTPMeasurement[]) => {
   const averageOffset = totalOffset / bestMeasurements.length;
 
   const result = { averageOffset, averageRoundTrip };
-  console.log("New clock offset calculated:", result);
+  // console.log("New clock offset calculated:", result);
 
   return result;
 };

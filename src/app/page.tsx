@@ -12,7 +12,7 @@ export default async function Home() {
   const resetRoomStore = useRoomStore((state) => state.reset);
 
   useEffect(() => {
-      console.log("resetting stores");
+      // console.log("resetting stores");
       resetGlobalStore();
       resetRoomStore();
     }, [resetGlobalStore, resetRoomStore]);

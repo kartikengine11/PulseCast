@@ -173,7 +173,7 @@ export const UserGrid = () => {
     (x: number, y: number) => {
       const now = Date.now();
       if (now - lastLogTimeRef.current >= 100) {
-        console.log("Listening source update:", { position: { x, y } });
+        // console.log("Listening source update:", { position: { x, y } });
         updateListeningSourceSocket({ x, y });
         lastLogTimeRef.current = now;
       }

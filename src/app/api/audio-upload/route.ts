@@ -14,10 +14,10 @@ interface CloudinaryUploadResult {
 }
 
 export async function POST(req: NextRequest) {
-  console.log("inside post request");
+  // console.log("inside post request");
   try {
     const formData = await req.formData();
-    console.log("formData: ",formData);
+    // console.log("formData: ",formData);
     const file = formData.get("file") as File | null;
     const room = formData.get("room_id") as string | null;
 
@@ -52,7 +52,8 @@ export async function POST(req: NextRequest) {
     //   file.name," ::: ",
     //   room
     // )
-    await axios.post(`${process.env.BACKEND_URL}/upload-complete`,{
+    // console.log("urls: ",`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload-complete`)
+    await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload-complete`,{
         publicUrl: url,
         originalName: file.name,
         roomId : room
