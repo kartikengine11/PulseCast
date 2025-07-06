@@ -5,48 +5,59 @@ import { useRoomStore } from "@/store/room";
 import { CloudUpload, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import axios from 'axios'
+import axios from "axios";
+
+const MAX_FILE_SIZE_MB = 30;
 
 export const AudioUploader = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const roomId = useRoomStore((state) => state.roomId);
-  
+
   const handleFileUpload = async (file: File) => {
     setFileName(file.name);
+
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      toast.error(`File exceeds ${MAX_FILE_SIZE_MB}MB limit`);
+      return;
+    }
+
     try {
       setIsUploading(true);
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("upload_preset", "your_unsigned_preset"); // Replace with your preset
-        formData.append("folder", `pulseCast/${roomId}`);
 
-        // const response = await axios.post(
-        //   `https://api.cloudinary.com/v1_1/db1e4nbaa/video/upload`,
-        //   formData,
-        //   {
-        //     headers: { "Content-Type": "multipart/form-data" },
-        //     onUploadProgress: (progressEvent) => {
-        //       const percent = Math.round(
-        //         (progressEvent.loaded * 100) / (progressEvent.total || 1)
-        //       );
-        //       console.log(`Upload progress: ${percent}%`);
-        //     },
-        //   }
-        // );
-        console.log("file uploaded");
-        // const { secure_url } = response.data;
-        // console.log("Uploaded file URL:", secure_url);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "your_unsigned_preset"); // Replace with your preset
+      formData.append("folder", `pulseCast/${roomId}`);
 
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/db1e4nbaa/video/upload",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          onUploadProgress: (progressEvent) => {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / (progressEvent.total || 1)
+            );
+            console.log(`Upload progress: ${percent}%`);
+          },
+        }
+      );
+
+      console.log("File uploaded:", response.data);
       setTimeout(() => setFileName(null), 3000);
-    } 
-    catch (err) {
-      console.error("Error during upload:", err);
-      toast.error("Failed to upload audio file");
+    } catch (err: any) {
+      console.error("Upload error:", err);
+
+      if (axios.isAxiosError(err) && err.response?.status === 413) {
+        toast.error("File is too large. Please upload a smaller audio file.");
+      } else {
+        toast.error("Failed to upload audio file.");
+      }
+
       setFileName(null);
-    } 
-    finally{
+    } finally {
       setIsUploading(false);
     }
   };
@@ -76,7 +87,7 @@ export const AudioUploader = () => {
 
     const file = event.dataTransfer?.files?.[0];
     if (!file) return;
-    // make sure we only allow audio files
+
     if (!file.type.startsWith("audio/")) {
       toast.error("Please select an audio file");
       return;
@@ -89,9 +100,7 @@ export const AudioUploader = () => {
     <div
       className={cn(
         "border border-neutral-700/50 rounded-md mx-2 transition-all overflow-hidden bg-neutral-800/30 hover:bg-neutral-800/50",
-        isDragging
-          ? "outline outline-primary-400 outline-dashed"
-          : "outline-none"
+        isDragging ? "outline outline-primary-400 outline-dashed" : "outline-none"
       )}
       id="drop_zone"
       onDragOver={onDragOver}
