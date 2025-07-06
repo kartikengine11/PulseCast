@@ -152,7 +152,7 @@ const WebSocketManager = ({ roomId, username }: WebSocketManagerProps) => {
                 }
             }
             else if (response.type === "SCHEDULED_ACTION") {
-                console.log("Received scheduled action:", response);
+                // console.log("Received scheduled action:", response);
                 const {scheduledAction,serverTimeToExecute} = response;
                 if(scheduledAction.type === "PLAY") {
                     schedulePlay({

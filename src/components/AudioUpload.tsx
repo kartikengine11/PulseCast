@@ -28,7 +28,7 @@ export const AudioUploader = () => {
 
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("upload_preset", "your_unsigned_preset"); // Replace with your preset
+      formData.append("upload_preset", "kartik_pulseCast"); // Replace with your preset
       formData.append("folder", `pulseCast/${roomId}`);
 
       const response = await axios.post(
@@ -36,16 +36,17 @@ export const AudioUploader = () => {
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
-          onUploadProgress: (progressEvent) => {
-            const percent = Math.round(
-              (progressEvent.loaded * 100) / (progressEvent.total || 1)
-            );
-            console.log(`Upload progress: ${percent}%`);
-          },
-        }
+        },
       );
 
-      console.log("File uploaded:", response.data);
+      // console.log("File uploaded:", response.data.secure_url);
+      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload-complete`, {
+        publicUrl: response.data.secure_url,
+        originalName: file.name,
+        roomId
+      });
+
+
       setTimeout(() => setFileName(null), 3000);
     } catch (err: any) {
       console.error("Upload error:", err);
