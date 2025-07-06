@@ -71,7 +71,7 @@ const WebSocketManager = ({ roomId, username }: WebSocketManagerProps) => {
         if(socket){
             return;
         }
-        const newSocket: Socket = io("http://localhost:8080", {
+        const newSocket: Socket = io(process.env.NEXT_PUBLIC_BACKEND_URL, {
           query: { roomId, username },
         });
         setSocket(newSocket);
