@@ -260,9 +260,9 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
   const initializeAudio = async () => {
     // console.log("initializeAudio(),");
     // Create fresh audio context
-    console.log("SRC: ",STATIC_AUDIO_SOURCES)
+    // console.log("SRC: ",STATIC_AUDIO_SOURCES)
     const audioContext = initializeAudioContext();
-    console.log("state: ",audioContext)
+    // console.log("state: ",audioContext)
     // if (audioContext.state === "suspended") {
     //   await audioContext.resume();
     //   console.log("state: : ",audioContext)

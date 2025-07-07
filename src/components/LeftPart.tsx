@@ -45,13 +45,13 @@ const LeftPart = ({ className }: LeftProps) => {
 
       {/* Navigation Buttons */}
       <motion.div className="px-4 space-y-2 py-2">
-        <Button
+        {/* <Button
           className="w-full flex items-center gap-3 py-2 text-white font-medium bg-white/5 hover:bg-white/10 rounded-lg text-xs transition-all"
           variant="ghost"
         >
           <Library className="h-4 w-4" />
           <span>Default Library</span>
-        </Button>
+        </Button> */} 
 
         <Link href="#" target="_blank">
           <Button
@@ -78,12 +78,12 @@ const LeftPart = ({ className }: LeftProps) => {
             <li>If de-synced: pause, sync, or refresh.</li>
             <li>Use direct speakers — avoid Bluetooth.</li>
           </ul>
+          <div className="pt-2">
+            <AudioUploader />
+          </div>
         </div>
 
         {/* Audio Upload */}
-        <div className="pt-2">
-          <AudioUploader />
-        </div>
       </div>
     </motion.div>
   );

@@ -43,7 +43,7 @@ export const AudioControls = () => {
             </div>
             <div className="flex gap-2">
               <Button
-                className="text-xs px-3 py-1 h-auto bg-primary-600/80 hover:bg-primary-600 text-white"
+                className="text-xs px-3 py-1 h-auto bg-primary-600/80 hover:bg-primary-600 text-white cursor-pointer"
                 size="sm"
                 onClick={handleStartSpatialAudio}
                 disabled={isLoadingAudio}
@@ -51,7 +51,7 @@ export const AudioControls = () => {
                 Start
               </Button>
               <Button
-                className="text-xs px-3 py-1 h-auto bg-neutral-700/60 hover:bg-neutral-700 text-white"
+                className="text-xs px-3 py-1 h-auto bg-neutral-700/60 hover:bg-neutral-700 text-white cursor-pointer"
                 size="sm"
                 onClick={handleStopSpatialAudio}
                 disabled={isLoadingAudio}
