@@ -253,12 +253,10 @@ const initializeAudioContext = () => {
 export const useGlobalStore = create<GlobalState>((set, get) => {
   // Function to initialize or reinitialize audio system
   const initializeAudio = async () => {
-    // console.log("initializeAudio(),");
-    // Create fresh audio context
-    // console.log("SRC: ",STATIC_AUDIO_SOURCES)
     const audioContext = initializeAudioContext();
-
-    // Create master gain node for volume control
+    if (audioContext.state === "suspended") {
+      await audioContext.resume();
+    }
     const gainNode = audioContext.createGain();
     gainNode.gain.value = 1; // Default volume
     const sourceNode = audioContext.createBufferSource();
@@ -268,7 +266,6 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       source: STATIC_AUDIO_SOURCES[0],
       audioContext,
     });
-    // console.log("first: ",firstSource)
 
     // Decode initial first audio source
     sourceNode.buffer = firstSource.audioBuffer;
