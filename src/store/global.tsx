@@ -244,19 +244,31 @@ const loadAudioSource = async ({
   };
 };
 
-// Web audio API
-const initializeAudioContext = () => {
-  const audioContext = new AudioContext();
+// Web Audio API - Safe initialization for iOS and modern browsers
+const initializeAudioContext = (): AudioContext => {
+  const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+  if (!AudioContextClass) {
+    throw new Error("Web Audio API is not supported in this browser.");
+  }
+  const audioContext = new AudioContextClass();
   return audioContext;
 };
+
 
 export const useGlobalStore = create<GlobalState>((set, get) => {
   // Function to initialize or reinitialize audio system
   const initializeAudio = async () => {
+    // console.log("initializeAudio(),");
+    // Create fresh audio context
+    console.log("SRC: ",STATIC_AUDIO_SOURCES)
     const audioContext = initializeAudioContext();
-    if (audioContext.state === "suspended") {
-      await audioContext.resume();
-    }
+    console.log("state: ",audioContext)
+    // if (audioContext.state === "suspended") {
+    //   await audioContext.resume();
+    //   console.log("state: : ",audioContext)
+    // }
+    
+    // Create master gain node for volume control
     const gainNode = audioContext.createGain();
     gainNode.gain.value = 1; // Default volume
     const sourceNode = audioContext.createBufferSource();
@@ -266,6 +278,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       source: STATIC_AUDIO_SOURCES[0],
       audioContext,
     });
+    // console.log("first: ",firstSource)
 
     // Decode initial first audio source
     sourceNode.buffer = firstSource.audioBuffer;
