@@ -102,6 +102,7 @@ interface GlobalState extends GlobalStateValues {
   broadcastPlay: (trackTimeSeconds?: number) => void;
   broadcastPause: () => void;
   startSpatialAudio: () => void;
+  startSpiralSpatialAudio: () => void;
   sendStopSpatialAudio: () => void;
   setSpatialConfig: (config: SpatialConfigType) => void;
   updateListeningSource: (position: PositionType) => void;
@@ -578,6 +579,19 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
         socket: socket,
         request: {
           type: ClientActionEnum.enum.START_SPATIAL_AUDIO,
+        },
+      });
+    },
+
+
+    startSpiralSpatialAudio: () =>{
+      const state = get();
+      const { socket } = getSocket(state);
+
+      sendWSRequest({
+        socket: socket,
+        request: {
+          type: ClientActionEnum.enum.START_SPIRAL_SPATIAL_AUDIO,
         },
       });
     },

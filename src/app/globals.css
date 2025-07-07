@@ -121,3 +121,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+@theme inline {
+  --font-inter: var(--font-inter);
+  /* https://kyrylo.org/css/2025/02/09/oklch-css-variables-for-tailwind-v4-colors.html */
+  --color-primary-50: oklch(98.19% 0.0181 155.83);
+  --color-primary-100: oklch(96.24% 0.0434 156.74);
+  --color-primary-200: oklch(92.5% 0.0806 155.99);
+  --color-primary-300: oklch(87.12% 0.1363 154.45);
+  --color-primary-400: oklch(80.03% 0.1821 151.71);
+  --color-primary-500: oklch(72.27% 0.192 149.58);
+  --color-primary-600: oklch(62.71% 0.1699 149.21);
+  --color-primary-700: oklch(52.73% 0.1371 150.07);
+  --color-primary-800: oklch(44.79% 0.1083 151.33);
+  --color-primary-900: oklch(39.25% 0.0896 152.54);
+  --color-primary-950: oklch(26.64% 0.0628 152.93);
+}

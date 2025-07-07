@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { Separator } from "../components/ui/separator";
 import { Button } from "./ui/button";
 import { AudioUploader } from "./AudioUpload";
+import Link from "next/link";
+import { AudioControls } from "./AudioControls";
 
 interface LeftProps {
   className?: string;
@@ -51,7 +53,7 @@ const LeftPart = ({ className }: LeftProps) => {
           <span>Default Library</span>
         </Button>
 
-        <a href="https://cobalt.tools/" target="_blank" rel="noopener noreferrer">
+        <Link href="#" target="_blank">
           <Button
             className="w-full flex items-center gap-3 py-2 text-white font-medium bg-white/5 hover:bg-white/10 rounded-lg text-xs transition-all"
             variant="ghost"
@@ -59,10 +61,13 @@ const LeftPart = ({ className }: LeftProps) => {
             <Search className="h-4 w-4" />
             <span>Search Music</span>
           </Button>
-        </a>
+        </Link>
       </motion.div>
 
       <Separator className="bg-neutral-800/50 mt-2" />
+
+      {/* Audio Controls */}
+      <AudioControls />
 
       {/* Tips Section */}
       <div className="mt-auto p-4 pt-3 border-t border-neutral-800/50 text-neutral-400 text-xs space-y-4">
