@@ -1,7 +1,7 @@
 "use client";
 
 import { useGlobalStore } from "@/store/global";
-import { Construction, Orbit,Shell } from "lucide-react";
+import { Construction, Flower, Orbit,Shell } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "../components/ui/button";
 
@@ -66,8 +66,8 @@ export const AudioControls = () => {
         <motion.div className="bg-neutral-800/20 rounded-md p-3 hover:bg-neutral-800/30 transition-colors">
           <div className="flex justify-between items-center">
             <div className="text-xs text-neutral-300 flex items-center gap-1.5">
-              <Shell className="h-3 w-3 text-primary-500" />
-              <span>Spiral</span>
+              <Flower className="h-3 w-3 text-primary-500" />
+              <span>Flower</span>
             </div>
             <div className="flex gap-2">
               <Button

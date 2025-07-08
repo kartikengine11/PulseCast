@@ -111,8 +111,7 @@ return (
             </AnimatePresence>
           </Tabs>
         </div>
-        {/* Bottom Player (fixed height) */}
-        <Bottom />
+        
       </motion.div>
     )}
   </div>
