@@ -2,13 +2,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { useGlobalStore } from "@/store/global";
 import { Library, ListMusic, Rotate3D } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-// import { TopBar } from "../room/TopBar";
-// import { Bottom } from "./Bottom";
 import Left from "./LeftPart";
 import { Main } from "./Main";
 import { Right } from "./Right";
 import { TopBar } from "./TopBar";
-// import { Main } from "next/document";
+import { useWakeLock } from "@/utils/hooks/useWakeLock";
 import { Bottom } from "./Bottom";
 
 interface DashboardProps {
@@ -18,8 +16,9 @@ interface DashboardProps {
 export const Dashboard = ({ roomId }: DashboardProps) => {
   const isSynced = useGlobalStore((state) => state.isSynced);
   const isLoadingAudio = useGlobalStore((state) => state.isInitingSystem);
-
   const isReady = isSynced && !isLoadingAudio;
+  
+  useWakeLock(isReady);
 
   const containerVariants = {
     hidden: { opacity: 0 },
