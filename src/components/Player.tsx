@@ -16,16 +16,12 @@ export const Player = () => {
   const broadcastPlay = useGlobalStore((state) => state.broadcastPlay);
   const broadcastPause = useGlobalStore((state) => state.broadcastPause);
   const isPlaying = useGlobalStore((state) => state.isPlaying);
-  const getCurrentTrackPosition = useGlobalStore(
-    (state) => state.getCurrentTrackPosition
-  );
+  const getCurrentTrackPosition = useGlobalStore((state) => state.getCurrentTrackPosition);
   const selectedAudioId = useGlobalStore((state) => state.selectedAudioId);
   const audioSources = useGlobalStore((state) => state.audioSources);
   const currentTime = useGlobalStore((state) => state.currentTime);
   const skipToNextTrack = useGlobalStore((state) => state.skipToNextTrack);
-  const skipToPreviousTrack = useGlobalStore(
-    (state) => state.skipToPreviousTrack
-  );
+  const skipToPreviousTrack = useGlobalStore((state) => state.skipToPreviousTrack);
   const isShuffled = useGlobalStore((state) => state.isShuffled);
   const toggleShuffle = useGlobalStore((state) => state.toggleShuffle);
 
@@ -38,9 +34,8 @@ export const Player = () => {
   useEffect(() => {
     if (!selectedAudioId) return;
 
-    const audioSource = audioSources.find(
-      (source) => source.id === selectedAudioId
-    );
+    const audioSource = audioSources.find((source) => source.id === selectedAudioId
+);
     if (audioSource?.audioBuffer) {
       setTrackDuration(audioSource.audioBuffer.duration);
       // Reset slider position when track changes

@@ -1,18 +1,17 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
 import { motion } from "framer-motion";
 import { UserGrid } from "../components/UserGrid";
 
-interface RightProps {
-  className?: string;
-}
-
-export const Right = ({ className }: RightProps) => {
+export const Right = () => {
   return (
     <motion.div
       className={cn(
-        "w-full lg:w-80 lg:flex-shrink-0 border-l border-neutral-800/50 backdrop-blur-md flex flex-col pb-4 lg:pb-0 text-sm space-y-1 overflow-y-auto pr-2 flex-shrink-0 scrollbar-thin scrollbar-thumb-rounded-md scrollbar-thumb-muted-foreground/10 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/20",
-        className
+        "flex h-full w-full flex-col pb-4 text-sm space-y-1 overflow-y-auto pr-2",
+        "lg:w-80 lg:flex-shrink-0 lg:pb-0 lg:border-l border-neutral-800/50",
+        "backdrop-blur-md scrollbar-thin scrollbar-thumb-rounded-md scrollbar-thumb-muted-foreground/10 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/20"
       )}
     >
       <motion.div className="flex-1">
@@ -32,9 +31,7 @@ export const Right = ({ className }: RightProps) => {
               devices in the room.
             </p>
             <p className="text-xs leading-relaxed mt-3">
-              {
-                "Drag the headphone icon around and hear how the volume changes on each device. Isn't it cool!"
-              }
+              Drag the headphone icon around and hear how the volume changes on each device. Isn't it cool!
             </p>
           </div>
         </div>

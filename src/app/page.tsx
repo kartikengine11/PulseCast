@@ -5,6 +5,7 @@ import { useGlobalStore } from "@/store/global";
 import { useRoomStore } from "@/store/room";
 import { useEffect } from "react";
 import SocketAudioPlayer from "./SocketAudioPlayer";
+import VisualizerCanvas from "@/components/VisualizerCanvas";
 
 export default async function Home() {
 
@@ -33,7 +34,8 @@ export default async function Home() {
     return(
       <div>  
         <Join />
-        {/* <SocketAudioPlayer /> */}
+        {/* <Check />
+        <SocketAudioPlayer /> */}
         <h1>PulseCast 🎧</h1>
         <button onClick={handlePlay}>Play Audio</button>
     </div>

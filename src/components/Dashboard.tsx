@@ -8,6 +8,7 @@ import { Right } from "./Right";
 import { TopBar } from "./TopBar";
 import { useWakeLock } from "@/utils/hooks/useWakeLock";
 import { Bottom } from "./Bottom";
+import VisualizerCanvas from "./VisualizerCanvas";
 
 interface DashboardProps {
   roomId: string;
@@ -18,8 +19,7 @@ export const Dashboard = ({ roomId }: DashboardProps) => {
   const isLoadingAudio = useGlobalStore((state) => state.isInitingSystem);
   const isReady = isSynced && !isLoadingAudio;
   
-  useWakeLock(isReady);
-
+  useWakeLock(true);
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -45,9 +45,10 @@ return (
       >
         {/* --- Desktop Layout (lg and up) --- */}
         <div className="hidden lg:flex flex-1 overflow-hidden min-h-0">
-          <Left className="flex" />
+          <Left/>
+          {/* <VisualizerCanvas /> */}
           <Main />
-          <Right className="flex w-80 flex-shrink-0" />
+          <Right />
         </div>
 
         {/* --- Mobile Layout (less than lg) --- */}
@@ -80,8 +81,8 @@ return (
                   transition={{ duration: 0.3 }}
                   className="h-full"
                 >
-                  <Left className="flex h-full w-full" />
-                </motion.div>
+                  <Left/>
+                </motion.div> 
               </TabsContent>
 
               <TabsContent value="queue" className="flex-1 overflow-y-auto min-h-0">
@@ -104,7 +105,7 @@ return (
                   transition={{ duration: 0.3 }}
                   className="h-full"
                 >
-                  <Right className="flex h-full w-full" />
+                  <Right />
                 </motion.div>
               </TabsContent>
             </AnimatePresence>

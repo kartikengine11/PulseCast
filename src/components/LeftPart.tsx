@@ -9,20 +9,15 @@ import { AudioUploader } from "./AudioUpload";
 import Link from "next/link";
 import { AudioControls } from "./AudioControls";
 
-interface LeftProps {
-  className?: string;
-}
-
-const LeftPart = ({ className }: LeftProps) => {
+const LeftPart = () => {
   return (
     <motion.aside
       initial={{ x: -20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
       className={cn(
-        "w-full lg:w-72 flex-shrink-0 border-r border-white/10 backdrop-blur-md flex flex-col h-full",
-        "scrollbar-thin overflow-y-auto text-white text-sm",
-        className
+        "flex h-full w-full flex-col border-r border-white/10 backdrop-blur-md text-white text-sm scrollbar-thin overflow-y-auto",
+        "lg:w-72 lg:flex-shrink-0" // desktop specific
       )}
     >
       {/* Header */}
@@ -34,9 +29,7 @@ const LeftPart = ({ className }: LeftProps) => {
       {/* Search & Controls */}
       <div className="p-5 space-y-4">
         <div className="space-y-1">
-          <p className="text-neutral-400 text-xs uppercase font-semibold">
-            Actions
-          </p>
+          <p className="text-neutral-400 text-xs uppercase font-semibold">Actions</p>
           <Link href="#">
             <Button
               variant="ghost"

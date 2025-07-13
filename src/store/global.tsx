@@ -32,6 +32,7 @@ interface AudioPlayerState {
   audioContext: AudioContext;
   sourceNode: AudioBufferSourceNode;
   gainNode: GainNode;
+  analyser : AnalyserNode;
 }
 
 enum AudioPlayerError {
@@ -258,39 +259,35 @@ const initializeAudioContext = (): AudioContext => {
 export const useGlobalStore = create<GlobalState>((set, get) => {
   // Function to initialize or reinitialize audio system
   const initializeAudio = async () => {
-    // console.log("initializeAudio(),");
-    // Create fresh audio context
-    // console.log("SRC: ",STATIC_AUDIO_SOURCES)
     const audioContext = initializeAudioContext();
-    // console.log("state: ",audioContext)
-    // if (audioContext.state === "suspended") {
-    //   await audioContext.resume();
-    //   console.log("state: : ",audioContext)
-    // }
-    
-    // Create master gain node for volume control
+    // Create master gain node for volume control and analyser
     const gainNode = audioContext.createGain();
     gainNode.gain.value = 1; // Default volume
     const sourceNode = audioContext.createBufferSource();
-
+    const analyser = audioContext.createAnalyser();
+    
     // Load first source
     const firstSource = await loadAudioSource({
       source: STATIC_AUDIO_SOURCES[0],
       audioContext,
     });
     // console.log("first: ",firstSource)
-
+    
     // Decode initial first audio source
     sourceNode.buffer = firstSource.audioBuffer;
     sourceNode.connect(gainNode);
     gainNode.connect(audioContext.destination);
-
+    
+    sourceNode.connect(analyser);
+    analyser.connect(audioContext.destination);
+    
     set({
       audioSources: [firstSource],
       audioPlayer: {
         audioContext,
         sourceNode,
         gainNode,
+        analyser
       },
       downloadedAudioIds: new Set<string>(),
       duration: firstSource.audioBuffer.duration,
