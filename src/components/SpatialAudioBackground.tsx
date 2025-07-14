@@ -18,87 +18,62 @@ export const AudioVisualizer = () => {
     const dpr = window.devicePixelRatio || 1;
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset any transform
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      // Set canvas resolution
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+
+      // Set canvas display size
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      // Reset transform and apply scale for high DPI
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
     };
 
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Analyser config
+    // FFT setup
     analyser.fftSize = 256;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
     let angleOffset = 0;
     let time = 0;
-    const particles: Particle[] = [];
-
-    interface Particle {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-      life: number;
-      hue: number;
-    }
-
-    const createParticle = (hue: number): Particle => ({
-      x: canvas.width / 2,
-      y: canvas.height / 2,
-      vx: (Math.random() - 0.5) * 10,
-      vy: (Math.random() - 0.5) * 10,
-      size: Math.random() * 4 + 1,
-      life: 2,
-      hue,
-    });
-
-    const updateParticles = () => {
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life--;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${p.life / 100})`;
-        ctx.fill();
-        if (p.life <= 0) particles.splice(i, 1);
-      }
-    };
-
-    const spiralBars = () => {
-      const barWidth = 2;
-      for (let i = 0; i < bufferLength; i++) {
-        const barHeight = dataArray[i] * 0.7;
-        const hue = (i * 3 + barHeight + time * 20) % 360;
-
-        ctx.save();
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate(i * 0.1 + angleOffset);
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = `hsl(${hue}, 100%, 70%)`;
-        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-        ctx.fillRect(50 + barHeight / 2, 0, barWidth, barHeight);
-        ctx.restore();
-
-        if (barHeight > 100) {
-          particles.push(createParticle(hue));
-        }
-      }
-      angleOffset += 0.005;
-    };
 
     const animate = () => {
       requestAnimationFrame(animate);
       analyser.getByteFrequencyData(dataArray);
+
       time += 0.05;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      spiralBars();
-      updateParticles();
+
+      // Clear entire canvas
+      ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+
+      // Draw spiral bars centered
+      ctx.save();
+      ctx.translate(canvas.width / 2 / dpr, canvas.height / 2 / dpr);
+
+      for (let i = 0; i < bufferLength; i++) {
+        const value = dataArray[i];
+        const barHeight = value * 0.7;
+        const hue = (i * 4 + time * 20) % 360;
+
+        ctx.save();
+        ctx.rotate(i * 0.1 + angleOffset);
+        ctx.fillStyle = `hsl(${hue}, 100%, 60%)`;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = `hsl(${hue}, 100%, 60%)`;
+        ctx.fillRect(60, 0, 2, barHeight);
+        ctx.restore();
+      }
+
+      ctx.restore();
+      angleOffset += 0.005;
     };
 
     animate();
@@ -111,7 +86,12 @@ export const AudioVisualizer = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-screen h-screen block"
+      className="fixed top-0 left-0 block"
+      style={{
+        width: "100vw",
+        height: "100vh",
+        zIndex: -1, // Optional: send canvas behind other content
+      }}
     />
   );
 };
