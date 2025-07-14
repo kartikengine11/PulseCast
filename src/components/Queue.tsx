@@ -67,7 +67,7 @@ export const Queue = ({ className, ...rest }: React.ComponentProps<"div">) => {
                     ease: "easeOut",
                   }}
                   className={cn(
-                    "group flex items-center px-3 py-3 rounded-lg cursor-pointer transition-colors",
+                    "group flex items-center px-3 py-2 rounded-lg cursor-pointer transition-colors",
                     isSelected
                       ? "bg-white/5 text-white"
                       : "hover:bg-white/5 text-neutral-300"

@@ -692,7 +692,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       audioIndex?: number;
     }) => {
       const state = get();
-      const { sourceNode, audioContext, gainNode } = getAudioPlayer(state);
+      const { sourceNode, audioContext, gainNode,analyser } = getAudioPlayer(state);
 
       // Before any audio playback, ensure the context is running
       if (audioContext.state !== "running") {
@@ -714,6 +714,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       const newSourceNode = audioContext.createBufferSource();
       newSourceNode.buffer = audioBuffer;
       newSourceNode.connect(gainNode);
+      newSourceNode.connect(analyser);
 
       // Autoplay: Handle track ending naturally
       newSourceNode.onended = () => {
@@ -725,7 +726,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
         // and the sourceNode that ended is the *current* sourceNode.
         // This prevents handlers from old nodes interfering after a quick skip.
         if (currentlyIsPlaying && currentPlayer?.sourceNode === newSourceNode) {
-          const { audioContext } = currentPlayer;
+          const { audioContext,analyser } = currentPlayer;
           // Check if the buffer naturally reached its end
           // Calculate the expected end time in the AudioContext timeline
           const expectedEndTime =
@@ -798,7 +799,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       const { gain, rampTime } = user;
 
       // Process
-      const { audioContext, gainNode } = getAudioPlayer(state);
+      const { audioContext, gainNode,analyser } = getAudioPlayer(state);
 
       const now = audioContext.currentTime;
       const currentGain = gainNode.gain.value;

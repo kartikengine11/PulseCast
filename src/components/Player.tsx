@@ -176,7 +176,8 @@ export const Player = () => {
             <SkipBack className="w-7 h-7 md:w-5 md:h-5 fill-current" />
           </button>
           <button
-            className="bg-white text-black rounded-full p-3 md:p-2 hover:scale-105 transition-transform cursor-pointer duration-200 focus:outline-none"
+            className="bg-white text-black rounded-full p-3 md:p-2 hover:scale-105 hover:ring-2 hover:ring-white/20 focus-visible:ring-2 focus-visible:ring-white transition-all duration-200"
+
             onClick={handlePlay}
           >
             {isPlaying ? (

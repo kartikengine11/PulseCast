@@ -9,9 +9,9 @@ export const Bottom = () => {
       initial={{ y: 30, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="flex-shrink-0 border-t border-neutral-800/50 bg-neutral-900/10 backdrop-blur-lg p-4 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] z-10 relative w-full"
+      className="relative z-20 w-full flex-shrink-0 border-t border-white/10 bg-black/40 backdrop-blur-md shadow-[0_-8px_24px_rgba(0,0,0,0.2)] px-4 py-3 md:px-6 md:py-4"
     >
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto w-full">
         <Player />
       </div>
     </motion.footer>
