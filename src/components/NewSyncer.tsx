@@ -5,8 +5,6 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { Dashboard } from "./Dashboard";
 import WebSocketManager from "./WebSocketManager";
-import { SpatialAudioBackground } from "./SpatialAudioBackground";
-// import { WebSocketManager } from "./room/WebSocketManager";
 
 export const NewSyncer = ({roomId} : {roomId:string}) => {
   const setUsername = useRoomStore((state) => state.setUsername);
