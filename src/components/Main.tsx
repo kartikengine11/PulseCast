@@ -10,7 +10,7 @@ export const Main = () => {
   return (
     <div className="relative flex flex-col flex-1 h-full min-h-0 w-full overflow-hidden">
       {/* Visualizer Canvas Background */}
-      <div className="absolute inset-0 z-5 pointer-events-none">
+      <div className="absolute inset-0 z-10 pointer-events-none">
         <AudioVisualizer />
       </div>
 

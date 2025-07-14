@@ -11,21 +11,27 @@ export const AudioVisualizer = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !analyser) return;
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = canvas.offsetWidth * dpr;
-    canvas.height = canvas.offsetHeight * dpr;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.scale(devicePixelRatio, devicePixelRatio);
 
+    const dpr = window.devicePixelRatio || 1;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset any transform
+      ctx.scale(dpr, dpr);
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
 
     // Analyser config
     analyser.fftSize = 256;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
-    // State
     let angleOffset = 0;
     let time = 0;
     const particles: Particle[] = [];
@@ -50,7 +56,7 @@ export const AudioVisualizer = () => {
       hue,
     });
 
-    const updateParticles=()=>{
+    const updateParticles = () => {
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         p.x += p.vx;
@@ -62,17 +68,17 @@ export const AudioVisualizer = () => {
         ctx.fill();
         if (p.life <= 0) particles.splice(i, 1);
       }
-    }
+    };
 
     const spiralBars = () => {
-      let barWidth = 2;
+      const barWidth = 2;
       for (let i = 0; i < bufferLength; i++) {
-        let barHeight = dataArray[i]*0.7;
-        let hue = (i * 3 + barHeight + time * 20) % 360;
+        const barHeight = dataArray[i] * 0.7;
+        const hue = (i * 3 + barHeight + time * 20) % 360;
 
         ctx.save();
         ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate((i * 0.1) + angleOffset);
+        ctx.rotate(i * 0.1 + angleOffset);
         ctx.shadowBlur = 20;
         ctx.shadowColor = `hsl(${hue}, 100%, 70%)`;
         ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
@@ -84,32 +90,28 @@ export const AudioVisualizer = () => {
         }
       }
       angleOffset += 0.005;
-    }
+    };
 
     const animate = () => {
       requestAnimationFrame(animate);
       analyser.getByteFrequencyData(dataArray);
-      const waveformArray = new Uint8Array(bufferLength);
-      analyser.getByteTimeDomainData(waveformArray);
       time += 0.05;
-      // ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       spiralBars();
-      updateParticles(); // Always update particles
-};
-
+      updateParticles();
+    };
 
     animate();
 
     return () => {
+      window.removeEventListener("resize", resizeCanvas);
     };
   }, [analyser, isPlaying]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="flex w-full h-full"
+      className="fixed top-0 left-0 w-screen h-screen block"
     />
   );
 };

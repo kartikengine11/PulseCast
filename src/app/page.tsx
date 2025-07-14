@@ -36,8 +36,8 @@ export default async function Home() {
         <Join />
         {/* <Check />
         <SocketAudioPlayer /> */}
-        <h1>PulseCast 🎧</h1>
-        <button onClick={handlePlay}>Play Audio</button>
+        {/* <h1>PulseCast 🎧</h1>
+        <button onClick={handlePlay}>Play Audio</button> */}
     </div>
     )
 }
