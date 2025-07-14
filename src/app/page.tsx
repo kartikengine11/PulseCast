@@ -4,8 +4,6 @@ import { fetchAudio } from "@/lib/utils";
 import { useGlobalStore } from "@/store/global";
 import { useRoomStore } from "@/store/room";
 import { useEffect } from "react";
-import SocketAudioPlayer from "./SocketAudioPlayer";
-import VisualizerCanvas from "@/components/VisualizerCanvas";
 
 export default async function Home() {
 
