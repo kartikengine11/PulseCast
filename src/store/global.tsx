@@ -132,6 +132,22 @@ interface GlobalState extends GlobalStateValues {
 // Audio sources
 const STATIC_AUDIO_SOURCES: StaticAudioSource[] = [
   {
+    name: "Rebel Kantara A Legend Chapter 1.mp3",
+    url: "/Rebel Kantara A Legend Chapter 1.mp3",
+  },
+  {
+    name: "Brahmakalasha Kantara A Legend Chapter 1.mp3",
+    url: "/Brahmakalasha Kantara A Legend Chapter 1.mp3",
+  },
+  {
+    name: "Varaha Roopam Kantara A Legend Chapter 1.mp3",
+    url: "/Varaha Roopam Kantara A Legend Chapter 1.mp3",
+  },
+  {
+    name: "Karma Kantara A Legend Chapter 1.mp3",
+    url: "/Karma Kantara A Legend Chapter 1.mp3",
+  },
+  {
     name: "Jacob Tillberg - Feel You",
     url: "/Jacob Tillberg - Feel You.mp3",
   },
@@ -140,20 +156,12 @@ const STATIC_AUDIO_SOURCES: StaticAudioSource[] = [
     url: "/trndsttr.mp3",
   },
   {
-    name: "STVCKS - Don't Be Scared",
-    url: "/STVCKS - Don't Be Scared.mp3",
-  },
-  {
     name: "INZO x ILLUSIO - Just A Mirage",
     url: "/INZO x ILLUSIO - Just A Mirage.mp3",
   },
   {
     name: "Tom Reev, Assix & Jason Gewalt - Where It Hurts",
     url: "/Tom Reev, Assix & Jason Gewalt - Where It Hurts.mp3",
-  },
-  {
-    name: "DROELOE x San Holo - Lines of the Broken (ft. CUT)",
-    url: "/DROELOE x San Holo - Lines of the Broken (ft. CUT).mp3",
   },
   {
     name: "joyful - chess (slowed)",
